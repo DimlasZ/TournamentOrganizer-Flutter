@@ -20,8 +20,9 @@ class CsvService {
         final r = match.result!;
         final p1 = playerMap[match.player1Id] ?? match.player1Id;
         final p2 = playerMap[match.player2Id] ?? match.player2Id!;
-        rows.add('${r.draws},$p1,${r.player1Wins},$p2,${r.player2Wins},'
-            '${round.roundNumber},${tournament.dateStr}');
+        final matchDraw = r.player1Wins == r.player2Wins ? 1 : 0;
+        rows.add('$matchDraw,$p1,${r.player1Wins},$p2,${r.player2Wins},'
+            '${round.roundNumber},${tournament.dateStr}T00:00:00Z');
       }
     }
 

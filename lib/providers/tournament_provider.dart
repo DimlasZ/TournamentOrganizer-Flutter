@@ -86,7 +86,6 @@ class TournamentProvider extends ChangeNotifier {
     final round = _active?.activeRound;
     if (round == null) return;
     for (final match in round.matches) {
-      if (match.result != null) continue;
       final p1IsA = match.player1Id == idA;
       final p1IsB = match.player1Id == idB;
       final p2IsA = match.player2Id == idA;
@@ -102,7 +101,6 @@ class TournamentProvider extends ChangeNotifier {
     TournamentMatch? matchB;
     bool aIsP1 = false, bIsP1 = false;
     for (final m in round.matches) {
-      if (m.result != null) continue;
       if (m.player1Id == idA || m.player2Id == idA) {
         matchA = m;
         aIsP1 = m.player1Id == idA;

@@ -235,7 +235,7 @@ class _PairingsScreenState extends State<PairingsScreen> {
     }
 
     return Card(
-      color: const Color(0xFF1E1E1E),
+      color: const Color(0xFF1A2E4A),
       margin: const EdgeInsets.only(bottom: 8),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -290,12 +290,20 @@ class _PairingsScreenState extends State<PairingsScreen> {
                       style: TextStyle(color: scoreColor, fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
-                    TextButton(
-                      onPressed: () => setState(() {
+                    InkWell(
+                      onTap: () => setState(() {
                         _editingMatchId = match.id;
                         _editingRoundNum = roundNum;
                       }),
-                      child: const Text('Edit', style: TextStyle(color: Colors.white38, fontSize: 12)),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2A2A2A),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: Colors.white24),
+                        ),
+                        child: const Text('Edit', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                      ),
                     ),
                   ],
                 )
@@ -525,11 +533,6 @@ class _PairingsScreenState extends State<PairingsScreen> {
             TextButton(
               onPressed: timer.stopTimer,
               child: const Text('Dismiss', style: TextStyle(color: Colors.redAccent)),
-            )
-          else if (timer.timerState == TimerState.running)
-            TextButton(
-              onPressed: timer.stopTimer,
-              child: const Text('Stop', style: TextStyle(color: Colors.white54)),
             ),
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.white24, size: 18),
@@ -570,9 +573,12 @@ class _PairingsScreenState extends State<PairingsScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           TextButton(
-            onPressed: () {
-              timer.setDuration(mins * 60 + secs);
+            onPressed: () async {
+              final newSecs = mins * 60 + secs;
               Navigator.pop(ctx);
+              await timer.stopTimer();
+              timer.setDuration(newSecs);
+              await timer.startTimer();
             },
             child: const Text('Set', style: TextStyle(color: Colors.deepPurpleAccent)),
           ),
@@ -591,15 +597,15 @@ class _PairingsScreenState extends State<PairingsScreen> {
       onExpansionChanged: (v) => setState(() => _showHistory = v),
       iconColor: Colors.white54,
       collapsedIconColor: Colors.white54,
-      children: t.completedRounds.map((round) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-            child: Text('Round ${round.roundNumber}',
-                style: const TextStyle(color: Colors.white54, fontWeight: FontWeight.bold)),
-          ),
-          ...round.matches.map((m) {
+      children: t.completedRounds.map((round) => ExpansionTile(
+        title: Text('Round ${round.roundNumber}',
+            style: const TextStyle(color: Colors.white54, fontWeight: FontWeight.bold, fontSize: 13)),
+        iconColor: Colors.white38,
+        collapsedIconColor: Colors.white38,
+        initiallyExpanded: false,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+        childrenPadding: EdgeInsets.zero,
+        children: round.matches.map((m) {
             if (m.isBye) {
               return ListTile(
                 dense: true,
@@ -663,6 +669,21 @@ class _PairingsScreenState extends State<PairingsScreen> {
                           await tp.editHistoryResult(round.roundNumber, m.id,
                               player1Wins: opt.p1, player2Wins: opt.p2, draws: opt.d);
                           setState(() { _editingMatchId = null; _editingRoundNum = null; });
+                          final activeRound = tp.activeTournament?.activeRound;
+                          if (context.mounted && activeRound != null &&
+                              !activeRound.matches.any((mx) => mx.result != null)) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text('Result corrected. Redo current round pairings?'),
+                              action: SnackBarAction(
+                                label: 'Redo',
+                                onPressed: () async {
+                                  final pp2 = context.read<PlayerProvider>();
+                                  await tp.repairActiveRound(pp2.players);
+                                },
+                              ),
+                              duration: const Duration(seconds: 5),
+                            ));
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -677,8 +698,7 @@ class _PairingsScreenState extends State<PairingsScreen> {
                     )
                   : null,
             );
-          }),
-        ],
+          }).toList(),
       )).toList(),
     );
   }

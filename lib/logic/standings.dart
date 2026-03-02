@@ -128,7 +128,7 @@ List<StandingsEntry> computeStandings(
     return raw < _floor ? _floor : raw;
   }
 
-  // Second pass: compute OMW% and OGW%
+  // Second pass: compute OMW% and OGW% — output only active players
   final entries = <StandingsEntry>[];
   for (final id in activePlayers) {
     final s = stats[id]!;
@@ -162,11 +162,14 @@ List<StandingsEntry> computeStandings(
   }
 
   // Sort: Points → OMW% → GW% → OGW%
+  // Round to display precision (1 decimal of %) to avoid floating-point false distinctions
   entries.sort((a, b) {
     if (b.matchPoints != a.matchPoints) return b.matchPoints.compareTo(a.matchPoints);
-    if (b.omwPct != a.omwPct) return b.omwPct.compareTo(a.omwPct);
-    if (b.gwPct != a.gwPct) return b.gwPct.compareTo(a.gwPct);
-    return b.ogwPct.compareTo(a.ogwPct);
+    final omwCmp = (b.omwPct * 1000).round().compareTo((a.omwPct * 1000).round());
+    if (omwCmp != 0) return omwCmp;
+    final gwCmp = (b.gwPct * 1000).round().compareTo((a.gwPct * 1000).round());
+    if (gwCmp != 0) return gwCmp;
+    return (b.ogwPct * 1000).round().compareTo((a.ogwPct * 1000).round());
   });
 
   return entries;
