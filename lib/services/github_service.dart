@@ -40,7 +40,7 @@ class GitHubService {
     final body = <String, dynamic>{
       'message': 'Upload results: $filename',
       'content': base64Encode(utf8.encode(csvContent)),
-      if (sha != null) 'sha': sha,
+      'sha': ?sha,
     };
 
     try {

@@ -26,17 +26,17 @@ final _router = GoRouter(
       builder: (context, state, shell) => _ScaffoldWithTabs(shell: shell),
       branches: [
         StatefulShellBranch(routes: [
-          GoRoute(path: '/players', builder: (_, __) => const PlayerManagerScreen()),
+          GoRoute(path: '/players', builder: (_, _) => const PlayerManagerScreen()),
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/tournament/setup', builder: (_, __) => const TournamentSetupScreen()),
-          GoRoute(path: '/tournament/pairings', builder: (_, __) => const PairingsScreen()),
+          GoRoute(path: '/tournament/setup', builder: (_, _) => const TournamentSetupScreen()),
+          GoRoute(path: '/tournament/pairings', builder: (_, _) => const PairingsScreen()),
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/standings', builder: (_, __) => const StandingsScreen()),
+          GoRoute(path: '/standings', builder: (_, _) => const StandingsScreen()),
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/history', builder: (_, __) => const HistoryScreen()),
+          GoRoute(path: '/history', builder: (_, _) => const HistoryScreen()),
         ]),
       ],
     ),

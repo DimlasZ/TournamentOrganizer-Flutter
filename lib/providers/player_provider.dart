@@ -8,6 +8,20 @@ const _uuid = Uuid();
 const _remoteCsvUrl =
     'https://raw.githubusercontent.com/GuySchnidrig/ManaCore/main/data/processed/players.csv';
 
+/// Parses a CSV body and returns the player names found in column 1.
+/// Skips the header row, empty names, and "Missing Player" entries.
+List<String> parseCsvToNames(String csvBody) {
+  final names = <String>[];
+  for (final line in csvBody.split('\n').skip(1)) {
+    final cols = line.split(',');
+    if (cols.length < 2) continue;
+    final name = cols[1].trim();
+    if (name.isEmpty || name == 'Missing Player') continue;
+    names.add(name);
+  }
+  return names;
+}
+
 class PlayerProvider extends ChangeNotifier {
   List<Player> _players = [];
 
@@ -29,13 +43,9 @@ class PlayerProvider extends ChangeNotifier {
     try {
       final res = await http.get(Uri.parse(_remoteCsvUrl));
       if (res.statusCode != 200) return;
-      final lines = res.body.split('\n');
+      final names = parseCsvToNames(res.body);
       bool changed = false;
-      for (final line in lines.skip(1)) {
-        final cols = line.split(',');
-        if (cols.length < 2) continue;
-        final name = cols[1].trim();
-        if (name.isEmpty || name == 'Missing Player') continue;
+      for (final name in names) {
         final exists = _players.any(
           (p) => p.name.toLowerCase() == name.toLowerCase(),
         );

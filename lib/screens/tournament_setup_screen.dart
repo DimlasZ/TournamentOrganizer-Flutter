@@ -164,7 +164,11 @@ class _TournamentSetupScreenState extends State<TournamentSetupScreen> {
                       return CheckboxListTile(
                         value: checked,
                         onChanged: (v) => setState(() {
-                          if (v == true) _selected.add(p.id); else _selected.remove(p.id);
+                          if (v == true) {
+                            _selected.add(p.id);
+                          } else {
+                            _selected.remove(p.id);
+                          }
                         }),
                         title: Text(p.name, style: const TextStyle(color: Colors.white)),
                         activeColor: Colors.deepPurpleAccent,
