@@ -1,0 +1,21 @@
+draws,player1,player1Wins,player2,player2Wins,round,tournamentDate
+0,Andrin,2,Ivo,0,1,2026-04-26T00:00:00Z
+0,Sili,1,Thomas,2,1,2026-04-26T00:00:00Z
+1,Lukas Stalder,1,Myri,1,1,2026-04-26T00:00:00Z
+0,Tommy,0,Dimlas,2,1,2026-04-26T00:00:00Z
+1,Joel K.,1,Beni,1,1,2026-04-26T00:00:00Z
+0,Andrin,0,Dimlas,2,2,2026-04-26T00:00:00Z
+0,Thomas,2,Beni,0,2,2026-04-26T00:00:00Z
+0,Joel K.,0,Lukas Stalder,2,2,2026-04-26T00:00:00Z
+0,Myri,2,Sili,0,2,2026-04-26T00:00:00Z
+0,Ivo,1,Tommy,2,2,2026-04-26T00:00:00Z
+0,Dimlas,0,Thomas,2,3,2026-04-26T00:00:00Z
+0,Lukas Stalder,2,Andrin,0,3,2026-04-26T00:00:00Z
+0,Myri,0,Tommy,2,3,2026-04-26T00:00:00Z
+0,Beni,1,Sili,2,3,2026-04-26T00:00:00Z
+0,Joel K.,1,Ivo,2,3,2026-04-26T00:00:00Z
+0,Thomas,2,Lukas Stalder,1,4,2026-04-26T00:00:00Z
+0,Dimlas,2,Myri,0,4,2026-04-26T00:00:00Z
+0,Tommy,1,Sili,2,4,2026-04-26T00:00:00Z
+0,Andrin,2,Joel K.,1,4,2026-04-26T00:00:00Z
+0,Ivo,2,Beni,1,4,2026-04-26T00:00:00Z
